@@ -8,6 +8,7 @@
             {
               "name": "RuggedNft",
               "addresses": {
+                "31337": "0x3aa5ebb10dc797cac828524e59a333d0a371443c"
               }
             }
           ]
@@ -35,6 +36,7 @@
     "useDefineForClassFields": true
   },
   "include": [
-    "./src"
+    "./src",
+    "./scripts"
   ]
 }
