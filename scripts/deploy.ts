@@ -19,12 +19,6 @@ import { RuggedNft } from '../contracts/RuggedNft.sol'
 const ANVIL_PRIVATE_KEY_0 =
 	'0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80'
 
-console.log(`Deploy options:
-  DEPLOY_PRIVATE_KEY: ${process.env.DEPLOY_PRIVATE_KEY}
-  CHAIN_ID: ${process.env.CHAIN_ID}
-  RPC_URL: ${process.env.RPC_URL}
-`)
-
 // only deploy to OP chains
 const supportedChains = [optimism, optimismGoerli, foundry] as const
 
@@ -107,6 +101,9 @@ publicClient.waitForTransactionReceipt({ hash }).then(async (receipt) => {
 		const evmtsConfig = config.compilerOptions.plugins.find(
 			(plugin: any) => plugin.name === '@evmts/ts-plugin',
 		)
+		evmtsConfig.localContracts = evmtsConfig.localContracts ?? {}
+		evmtsConfig.localContracts.contracts =
+			evmtsConfig.localContracts.contracts ?? []
 		let contractConfig = evmtsConfig.localContracts.contracts.find(
 			(contract: any) => contract.name === 'RuggedNft',
 		)
