@@ -1,11 +1,13 @@
-import { RuggedNft } from '../../contracts/RuggedNft.sol'
+import { useState } from 'react'
 import { Address, mainnet, useAccount, useContractRead, useNetwork } from 'wagmi'
+import { RuggedNft } from '../../contracts/RuggedNft.sol'
 
-export const WagmiReads = () => {
+export const Reads = () => {
 	const { address, isConnected } = useAccount()
 
 	const { chain = mainnet } = useNetwork()
 	const chainId = chain.id
+	const [isRuggedQuery, setIsRuggedQuery] = useState(0)
 
 	const { data: balance } = useContractRead({
 		/**
@@ -31,6 +33,22 @@ export const WagmiReads = () => {
 		...RuggedNft.read({ chainId }).ownerOf(BigInt(1)),
 		enabled: isConnected,
 	})
+	const { data: isRugged } = useContractRead({
+		...RuggedNft.read({ chainId }).rugged(BigInt(isRuggedQuery)),
+		enabled: isConnected,
+	})
+	const { data: jackpot } = useContractRead({
+		...RuggedNft.read({ chainId }).jackpot(),
+		enabled: isConnected,
+	})
+	const { data: mintPrice } = useContractRead({
+		...RuggedNft.read({ chainId }).MINT_PRICE(),
+		enabled: isConnected,
+	})
+	const { data: amountOfRugs } = useContractRead({
+		...RuggedNft.read({ chainId }).ruggedSupply(),
+		enabled: isConnected,
+	})
 	return (
 		<div>
 			<div>
@@ -41,6 +59,13 @@ export const WagmiReads = () => {
 				<div>tokenUri(BigInt(1)): {tokenUri?.toString()}</div>
 				<div>symbol(): {symbol?.toString()}</div>
 				<div>ownerOf(BigInt(1)): {ownerOf?.toString()}</div>
+				<div>jackpot(): {jackpot?.toString()}</div>
+				<div>mintPrice(): {mintPrice?.toString()}</div>
+				<div>amountOfRugs(): {amountOfRugs?.toString()}</div>
+				<div>isRugged
+					<input type="number" onChange={(e) => setIsRuggedQuery(parseInt(e.target.value))} />
+					: {isRugged?.toString()}
+				</div>
 			</div>
 		</div>
 	)

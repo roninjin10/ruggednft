@@ -5,7 +5,7 @@ import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/utils/Base64.sol";
 
 contract RuggedNft is ERC721 {
-    // event that is triggered when a new NFT is rugged 
+    // event that is triggered when a new NFT is rugged
     event Rugged(uint256 tokenId);
 
     // event that is triggered when jackpot is payed out

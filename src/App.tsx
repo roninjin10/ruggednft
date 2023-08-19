@@ -1,11 +1,11 @@
+import { Theme } from '@radix-ui/themes'
 import { ConnectButton } from '@rainbow-me/rainbowkit'
 import { useAccount } from 'wagmi'
-import { Theme } from '@radix-ui/themes'
 
-import { WagmiEvents } from './wagmi/WagmiEvents'
-import { WagmiReads } from './wagmi/WagmiReads'
-import { WagmiWrites } from './wagmi/WagmiWrites'
 import { useState } from 'react'
+import { Events } from './dev/Events'
+import { Reads } from './dev/Reads'
+import { Writes } from './dev/Writes'
 
 export function App() {
 	const [selectedComponent, selectComponent] =
@@ -15,16 +15,16 @@ export function App() {
 
 	const components = {
 		unselected: <>Select which component to render</>,
-		reads: <WagmiReads />,
-		writes: <WagmiWrites />,
-		events: <WagmiEvents />,
+		reads: <Reads />,
+		writes: <Writes />,
+		events: <Events />,
 	} as const
 
 	return (
 		<Theme>
 			<h1>Rugged NFT</h1>
 			<ConnectButton />
-			{isConnected && (
+			{isConnected && import.meta.env.NODE_ENV !== 'production' && (
 				<>
 					<hr />
 					<div style={{ display: 'flex' }}>
