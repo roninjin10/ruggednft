@@ -5,6 +5,12 @@ import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/utils/Base64.sol";
 
 contract RuggedNft is ERC721 {
+    // event that is triggered when a new NFT is rugged 
+    event Rugged(uint256 tokenId);
+
+    // event that is triggered when jackpot is payed out
+    event Payout(uint256 tokenId, uint256 amount, address to);
+
     uint256 public MINT_PRICE = 0.01 ether;
 
     uint256 public jackpot = 0;
@@ -39,11 +45,13 @@ contract RuggedNft is ERC721 {
     // TODO make me only callable after everybody is rugged
     function payout(uint256 tokenId) external {
         require(ruggedSupply + 1 == totalSupply, "Not everybody is rugged");
+        require(jackpot > 0, "Jackpot is empty");
         require(_exists(tokenId), "Token does not exist");
         require(!rugged[tokenId], "Token rugged");
         // no idea if this code is right copilot wrote it
         payable(ownerOf(tokenId)).transfer(jackpot);
         jackpot = 0;
+        emit Payout(tokenId, jackpot, ownerOf(tokenId));
     }
 
     // TODO make me random
@@ -51,6 +59,7 @@ contract RuggedNft is ERC721 {
         require(_exists(tokenId), "Token does not exist");
         require(!rugged[tokenId], "Token already rugged");
         rugged[tokenId] = true;
+        emit Rugged(tokenId);
         unchecked {
             ruggedSupply++;
         }
